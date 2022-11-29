@@ -87,6 +87,16 @@
     </section>
   </main>
 
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+  <script>
+    //Step 5 - The Global Error handler and 3rd Party Tracking
+    window.TrackJS && TrackJS.install({ 
+      token: "9c2d97ba884a4dfc8f6fe06ee0d2ab55"
+      // for more configuration options, see https://docs.trackjs.com
+    });
+    TrackJS.track('Testing TrackJS!');
+  </script>
+
   <script>
     let form = document.querySelector('form');
     form.addEventListener('submit', e => {
@@ -100,8 +110,89 @@
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
 
-    // Start your code here
-    // You may move this JS to another file if you wish
+    // Step 2 - Adding Buttons for Console Testing
+    errorBtns[0].addEventListener('click', () => {console.log('Console Log Demo');});
+
+    errorBtns[1].addEventListener('click', () => {console.error('Console Error Demo');});
+
+    errorBtns[2].addEventListener('click', () => {console.count('Console Count');});
+
+    errorBtns[3].addEventListener('click', () => {console.warn('Console Warn Demo');});
+
+    let num = 1;
+    errorBtns[4].addEventListener('click', () => {console.assert(num == 3,"The number is not equal to 3");});
+
+    errorBtns[5].addEventListener('click', () => {console.clear();});
+
+    errorBtns[6].addEventListener('click', () => {console.dir(errorBtns);});
+
+    errorBtns[7].addEventListener('click', () => {console.dirxml(errorBtns);});
+
+    errorBtns[8].addEventListener('click', () => {
+      console.group();
+      console.log('group:')
+    });
+
+    errorBtns[9].addEventListener('click', () => {console.groupEnd();});
+
+    errorBtns[10].addEventListener('click', () => {
+      console.table([
+        {subject: 'CSE101', final: 'yes'},
+        {subject: 'CSE110', final: 'no'},
+        {subject: 'COGS108', final: 'no'}
+      ]);
+    });
+    
+    errorBtns[11].addEventListener('click', () => {console.time();});
+
+    errorBtns[12].addEventListener('click', () => {console.timeEnd();});
+
+    function deep(){
+      deeper();
+    }
+    function deeper(){
+      deepest();
+    }
+    function deepest(){
+      console.trace();
+    }
+    errorBtns[13].addEventListener('click', () => {deep();});
+
+    window.addEventListener('error', () => {console.log('Global error')});
+    errorBtns[14].addEventListener('click', function(){fakeFunc()});
+
+    //Step 3 - Trying Try/Catch
+    try {
+      aintgonnawork();
+    } catch (error) {
+      console.error('tried aintgonnawork');
+    } finally {
+      alert('inside finally');
+    }
+
+    //Step 4 - Throw and Custom Errors
+    class VotingAgeError extends Error {
+        constructor(message) {
+          super(message);
+          this.name = "VotingAgeError";
+      }
+    }
+
+    function VotingAgeCheck(age){
+      if(age < 18) {
+        throw new VotingAgeError(age +' is not old enough to vote\'');
+      }
+    }
+
+    try {
+      //won't give an error
+      VotingAgeCheck(21);
+      //will trigger my custom error
+      VotingAgeCheck(17);
+    } catch (error) {
+      console.error('Custom Error: ' + error.name);
+      console.error('Error message: ' + error.message);
+    }
   </script>
 </body>
 
